@@ -10,15 +10,10 @@ public aspect Logger {
 	
 	File file = new File("Register.txt");
 	File file2 = new File("Log.txt");
-	    Calendar cal;
-	    User user;
+	Calendar cal;
+	User user;
 
-    pointcut success() : call(* successfulSignUp*(..) );
-    after() : success() {
-    //Aspecto ejemplo: solo muestra este mensaje despu�s de haber creado un usuario 
-    	System.out.println("**** User created ****");
-    }
-pointcut registrarUsuario(User user, Person person): call(* successfulSignUp(User, Person)) && args(user, person);
+	pointcut registrarUsuario(User user, Person person): call(* successfulSignUp(User, Person)) && args(user, person);
 	before(User user, Person person) : registrarUsuario(user, person) {
 		if (!file.exists()) {
 			try {
@@ -29,12 +24,30 @@ pointcut registrarUsuario(User user, Person person): call(* successfulSignUp(Use
 
     
     after(User user, Person person) : registrarUsuario(user, person) {
-    this.cal = Calendar.getInstance();
-    try(PrintWriter pw=new PrintWriter(new FileOutputStream(file,true))){
-    pw.println("Usuario registrado: ["+user+"]    Fecha: ["+cal.getTime() + "]");
-    System.out.println("****Usuario ["+user.getNickname()+"] Registrado**** "+cal.getTime());
-    }catch(FileNotFoundException e){System.out.println(e.getMessage());}    
+    	this.cal = Calendar.getInstance();
+    	try(PrintWriter pw=new PrintWriter(new FileOutputStream(file,true))){
+    		pw.println("Usuario registrado: ["+user+"]    Fecha: ["+cal.getTime() + "]");
+    		System.out.println("****Usuario ["+user.getNickname()+"] Registrado**** "+cal.getTime());
+    	}catch(FileNotFoundException e){
+    		System.out.println(e.getMessage());
+    	}    
     }
 
-    
+    pointcut sesionEventos(User user) : call(* effectiveLogIn(User)) && args(user);
+    before(User user) : sesionEventos(user) {
+    	if (!file2.exists()) {
+    		try {
+    			file2.createNewFile();
+    		} catch (IOException e) {}   		
+    	}	  
+    }
+    after(User user) : sesionEventos(user) {  	
+    	this.cal = Calendar.getInstance();
+    	try(PrintWriter pw=new PrintWriter(new FileOutputStream(file2,true))){
+    		pw.println("Sesion iniciado por Usuario: ["+user.getNickname()+"]    Fecha: ["+cal.getTime()+"]");
+    		System.out.println("****Usuario ["+user.getNickname()+"] Ha iniciado sesión**** "+cal.getTime());
+    	}catch(FileNotFoundException e){
+    		System.out.println(e.getMessage());
+    	}
+    }
 }
