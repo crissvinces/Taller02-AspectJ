@@ -1,11 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import com.bettinghouse.Person;
 import com.bettinghouse.User;
 public aspect Logger {
+	
 	File file = new File("Register.txt");
 	File file2 = new File("Log.txt");
 	    Calendar cal;
@@ -17,6 +19,14 @@ public aspect Logger {
     	System.out.println("**** User created ****");
     }
 pointcut registrarUsuario(User user, Person person): call(* successfulSignUp(User, Person)) && args(user, person);
+	before(User user, Person person) : registrarUsuario(user, person) {
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {};
+		}
+	}
+
     
     after(User user, Person person) : registrarUsuario(user, person) {
     this.cal = Calendar.getInstance();
