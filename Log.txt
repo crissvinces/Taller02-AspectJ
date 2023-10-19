@@ -1,1 +1,4 @@
-Sesion iniciado por Usuario: [jmsantos]    Fecha: [Wed Oct 18 21:55:28 ECT 2023]
+Sesion iniciado por Usuario: [jorobando]    Fecha: [Wed Oct 18 22:09:36 ECT 2023]
+Sesion cerrada por Usuario: [jorobando]    Fecha: [Wed Oct 18 22:09:38 ECT 2023]
+Sesion iniciado por Usuario: [dlaborde]    Fecha: [Wed Oct 18 22:12:13 ECT 2023]
+Sesion cerrada por Usuario: [dlaborde]    Fecha: [Wed Oct 18 22:12:15 ECT 2023]
